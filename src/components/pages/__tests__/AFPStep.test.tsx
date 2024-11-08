@@ -3,6 +3,7 @@ import AFPStep from '../AFPStep'
 import { FormContext } from '@/contexts/context'
 import useErrorHandling from '../../../helpers/useErrorHandling'
 import { initialFormState } from '@/defaults/defaultFormState'
+import { generateDefaultFormPageProps } from '../test-utils/testSetup'
 
 // Mock the useErrorHandling hook
 jest.mock('../../../helpers/useErrorHandling', () => ({
@@ -19,19 +20,10 @@ jest.mock('../../FormButtons', () => ({
 const mockGoToNext = jest.fn()
 const mockSetState = jest.fn()
 
-const defaultFormPageProps = {
-  curStep: 1,
-  length: 5,
-  goBack: jest.fn(),
-  onStepChange: jest.fn(),
-  handleSubmit: jest.fn(),
-  goToNext: mockGoToNext,
-}
-
 const context = {
   setState: mockSetState,
   state: initialFormState,
-  formPageProps: defaultFormPageProps,
+  formPageProps: generateDefaultFormPageProps(mockGoToNext),
 }
 
 const mockValidateFields = jest.fn()
@@ -53,7 +45,6 @@ const renderComponent = () => {
   )
 }
 describe('AFPStep Component', () => {
-
   test('Burde rendre komponenten', () => {
     renderComponent()
     expect(
@@ -91,14 +82,10 @@ describe('AFPStep Component', () => {
   //Test if correct default value
   test('Burde ikke være huket av', () => {
     renderComponent()
-  
+
     expect(screen.getByLabelText('Ja')).not.toBeChecked()
     expect(screen.getByLabelText('Nei')).not.toBeChecked()
-    
   })
-
-
-
 })
 describe('Dersom det tidligere er huket av JA for AFP, ', () => {
   const contextWithState = {
