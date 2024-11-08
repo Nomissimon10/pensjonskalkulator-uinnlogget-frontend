@@ -6,6 +6,7 @@ import { getChartOptions } from './utils/chartUtils'
 import { Box } from '@navikt/ds-react'
 import ResultTable from './ResultTable'
 import { FormValueResult } from '@/common'
+import ResponseWarning from './ResponseWarning'
 
 interface BeregnResource {
   resource: { read(): FormValueResult | undefined }
@@ -30,6 +31,27 @@ const Beregn: React.FC<BeregnResource> = ({ resource }) => {
     )
   }, [state, beregnResult])
 
+  const Response = () => {
+    if (!beregnResult) return
+    if (!beregnResult.vilkaarsproeving.vilkaarErOppfylt)
+      return <ResponseWarning />
+
+    return (
+      <>
+        <h1>Resultat</h1>
+        <ResultTable
+          alderspensjon={beregnResult.alderspensjon}
+          afpPrivat={beregnResult.afpPrivat}
+        />
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={chartOptions}
+          containerProps={{ 'data-testid': 'highcharts-react' }}
+        />
+      </>
+    )
+  }
+
   return (
     <div>
       <Box
@@ -41,20 +63,7 @@ const Beregn: React.FC<BeregnResource> = ({ resource }) => {
         borderRadius={'large'}
         role="region"
       >
-        <h1>Resultat</h1>
-        <>
-          {beregnResult && (
-            <ResultTable
-              alderspensjon={beregnResult.alderspensjon}
-              afpPrivat={beregnResult.afpPrivat}
-            />
-          )}
-          <HighchartsReact
-            highcharts={Highcharts}
-            options={chartOptions}
-            containerProps={{ 'data-testid': 'highcharts-react' }}
-          />
-        </>
+        <Response />
       </Box>
     </div>
   )
