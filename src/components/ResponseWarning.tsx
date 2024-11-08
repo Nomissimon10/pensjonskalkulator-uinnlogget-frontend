@@ -1,13 +1,5 @@
 import { FormContext } from '@/contexts/context'
-import {
-  Alert,
-  BodyLong,
-  Box,
-  Button,
-  Heading,
-  HStack,
-  VStack,
-} from '@navikt/ds-react'
+import { Alert, BodyLong, Box, Button, Heading, VStack } from '@navikt/ds-react'
 import React, { useContext } from 'react'
 
 function ResponseWarning() {
