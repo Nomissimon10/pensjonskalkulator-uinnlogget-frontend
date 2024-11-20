@@ -14,5 +14,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(clientCredentials.token, {
       headers: { 'Content-Type': 'application/json' },
     })
+  } else {
+    return NextResponse.json({ message: 'Failed to retrieve token' })
   }
 }
