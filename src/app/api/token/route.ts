@@ -1,20 +1,14 @@
-import { requestAzureClientCredentialsToken } from '@navikt/oasis'
 import { NextRequest, NextResponse } from 'next/server'
+import { generateBearerToken } from '../simuler/route'
 
 export async function GET(req: NextRequest) {
   if (req.method !== 'GET') {
     return NextResponse.json({ message: 'Method not allowed' })
   }
 
-  const clientCredentials = await requestAzureClientCredentialsToken(
-    'api://dev-gcp.pensjonskalkulator.pensjonskalkulator-backend/.default'
-  )
+  const token = await generateBearerToken()
 
-  if (clientCredentials.ok) {
-    return NextResponse.json(clientCredentials.token, {
-      headers: { 'Content-Type': 'application/json' },
-    })
-  } else {
-    return NextResponse.json({ message: 'Failed to retrieve token' })
-  }
+  return NextResponse.json(token, {
+    headers: { 'Content-Type': 'application/json' },
+  })
 }
